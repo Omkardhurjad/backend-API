@@ -1,0 +1,42 @@
+name: Deploy Backend API
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Deploy to Virtual Machine
+        run: |
+          ssh -i ${{ secrets.SSH_KEY }} azureuser@20.55.97.67 "
+           sudo systemctl stop backend-api
+            sudo rm -rf /var/www/backend-api
+            mkdir -p /var/www/backend-api
+            cp -R . /var/www/backend-api
+            cd /var/www/backend-api
+            npm ci
+            sudo systemctl start backend-api
+          "
+
+      - name: Notify success
+        if: success()
+        run: echo "Deployment succeeded"
+
+      - name: Notify failure
+        if: failure()
+        run: echo "Deployment failed"
