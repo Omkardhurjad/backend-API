@@ -19,5 +19,5 @@ jobs:
     - name: Build and Deploy
       run: |
         npm run build
-        scp -o StrictHostKeyChecking=no -i ${{ secrets.SSH_KEY }} dist/* azureuser@20.55.97.67:/var/www/html
+        scp -o StrictHostKeyChecking=no -i ${{ secrets.SSH_KEY }} dist/* azureuser@20.55.97.67:80/sayHello
      
