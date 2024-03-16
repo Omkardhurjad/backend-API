@@ -20,5 +20,4 @@ jobs:
       run: |
         npm run build
         scp -o StrictHostKeyChecking=no -i ${{ secrets.SSH_KEY }} dist/* azureuser@20.55.97.67:/var/www/html
-      env:
-        SSH_KEY: ${{ secrets.SSH_KEY }}
+     
